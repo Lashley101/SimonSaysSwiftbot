@@ -84,90 +84,102 @@ public class Swiftbot_Project {
 
 
 
-		Scanner reader = new Scanner(System.in);											//The main method starts here
 
-		while (true) {
-			System.out.println("Enter a number to test a feature:\n");
+		Menu();
+	}																					
+
+	public static void Menu() throws InterruptedException {
+		boolean menu = true;
+		while(menu == true) {
+			Scanner reader = new Scanner(System.in);	
+			System.out.println("/////////////////////////////////////////////////////////////");
+			System.out.println("/////////////////////////////////////////////////////////////");
+			System.out.println("");
+			System.out.println("Welcome to Simon:\n");
+			System.out.println("");
+			if(Round>0) {
+				System.out.println("Your Highscore is: "+Round);
+			}
+			System.out.println("");
 			System.out.println(
-					"1 = Test Pressing button        \t|\t 2 = Testing Random Sequence\n"
-							+	"3 = Test ButtonLights       \\t|\\t 4 = Exit\\n");
+					"1 = Start Game        \t|\t 2 = Exit Game\n");
 			System.out.print("Enter a number: ");
 			String ans = reader.next();
 			switch (ans) {
 
-
 			case "1":
-				System.out.println("Button testing");
-				testButtons();
+				System.out.println("Running new game");
+				Round = 0;
+				seq.clear();
+				menu = false;
+				Game();
 				break;
 
 			case "2":
-				System.out.println("Sequence Testing");
-				ArrayList<ArrayList<String>> newSeq = RandomSequenceGenerator(seq);
-				seq = newSeq;
-				break;
-
-			case "3":
-				System.out.println("ButtonLight testing");
-				break;
-
-			case "4":
 				System.out.println("Bye Bye!!");
 				System.exit(5);
-
 			default:
 				System.out.println("ERROR: Please enter a valid number.");
 				break;
 			}
 		}
-	}																					//Main method ends here
+	}
 
 
-	public static void testButtons() throws InterruptedException {						//Currently using the Testbuttons() method to see how to use it properly
+
+	public static void buttonsActive() throws InterruptedException {						//Currently using the Testbuttons() method to see how to use it properly
 		int[] red = new int[] { 255, 0, 0 };
 		int[] blue = new int[] { 0, 0, 255 };
 		int[] green = new int[] { 0, 255, 0 };
 		int[] yellow = new int[] { 255, 255, 0 };
 		ArrayList<ArrayList<String>> playerSeq = new ArrayList<ArrayList<String>>();
-		Counter = 0;	
+		System.out.println("--------------------------------------------------------------------------");
+		System.out.println("");
+		System.out.println("Round:"+Round);
+		System.out.println("");
+		System.out.println("Button A: Red");
+		System.out.println("Button B: Blue");
+		System.out.println("Button X: Green");
+		System.out.println("Button Y: Yellow");
+		System.out.println("");
+
 		try {
-			long endtime = System.currentTimeMillis() + 8_000;
 			swiftBot.setButtonLight(Button.A, true);
 			swiftBot.setButtonLight(Button.B, true);
 			swiftBot.setButtonLight(Button.X, true);
 			swiftBot.setButtonLight(Button.Y, true);
 
 			swiftBot.enableButton(Button.A, () -> {
-				System.out.println("Button A Pressed.");
-				swiftBot.setButtonLight(Button.A, false);
 				swiftBot.setUnderlight(Underlight.MIDDLE_LEFT, red);
-				try {																		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
+				try {																			
 					playerSeq.add(new ArrayList<String>());
 					String[][] addColour = ConvertChoice(red);
 					ArrayList<ArrayList<String>> p1 = AddPlayerChoice(addColour); 
 					correct = CompareChoiceToSequence(p1,seq);	
-					System.out.println(correct);
-					for(ArrayList<String> col1 : playerSeq){
-						for(String code : col1){
-							System.out.print(code + ",");
-						}	
-					}
-					System.out.println("\r");
-					System.out.println("After CompareChoiceToSequence is passed");
-					System.out.println("\r gap");
-					//
 					if(correct == true) {
 						for(int x=0;x<3;x++) {
 							playerSeq.get(Counter-1).add(p1.get(0).get(x));
 						}
-						System.out.println("IT IS RED");
+						System.out.println("Colours Inputted: "+Counter);
+						if(Counter == Round) {
+							swiftBot.disableAllButtons();
+							swiftBot.disableButtonLights();
+							Thread.sleep(300);
+							swiftBot.disableUnderlight(Underlight.MIDDLE_LEFT);
+							Game();
+						}
 					}
 					else {
+						swiftBot.disableAllButtons();
+						swiftBot.disableButtonLights();
+						swiftBot.disableUnderlights();
 						System.out.println("\r");
 						System.out.println("GAME OVER NERD");
 						System.out.println("You made it to Round: "+Round);
-						
-						System.exit(5);
+						System.out.println("\r");
+						System.out.println("\r");
+						Thread.sleep(7000);
+						Menu();
 					}
 					Thread.sleep(500);															//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 				} catch (InterruptedException e) {
@@ -178,32 +190,40 @@ public class Swiftbot_Project {
 			});
 
 			swiftBot.enableButton(Button.B, () -> {
-				System.out.println("Button B Pressed."); 
-				swiftBot.setButtonLight(Button.B, false);
 				swiftBot.setUnderlight(Underlight.BACK_LEFT, blue);
 				try {																		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
 					playerSeq.add(new ArrayList<String>());
 					String[][] addColour = ConvertChoice(blue);                               
 					ArrayList<ArrayList<String>> p1 = AddPlayerChoice(addColour); 
-					correct = CompareChoiceToSequence(p1,seq);	
-					System.out.println(correct);												
+					correct = CompareChoiceToSequence(p1,seq);													
 					if(correct == true) {
 						for(int x=0;x<3;x++) {
 							playerSeq.get(Counter-1).add(p1.get(0).get(x));
 						}
-						System.out.println("IT IS BLUE");
+						System.out.println("Colours Inputted: "+Counter);
+						if(Counter == Round) {
+							swiftBot.disableAllButtons();
+							swiftBot.disableButtonLights();
+							Thread.sleep(300);
+							swiftBot.disableUnderlight(Underlight.BACK_LEFT);
+							Game();
+						}
 					}
 					else {
+						swiftBot.disableAllButtons();
+						swiftBot.disableButtonLights();
+						swiftBot.disableUnderlights();
 						System.out.println("\r");
 						System.out.println("GAME OVER NERD");
 						System.out.println("You made it to Round: "+Round);
+						System.out.println("\r");
+						System.out.println("\r");
 						
-						System.exit(5);
+						Thread.sleep(7000);
+						Menu();
 					}
-					//CURRENT WORKING AREA
-					Thread.sleep(500);															//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					Thread.sleep(500);															
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					System.exit(5);
 				}
@@ -211,29 +231,38 @@ public class Swiftbot_Project {
 			});
 
 			swiftBot.enableButton(Button.X, () -> {
-				System.out.println("Button X Pressed.");; 
-				swiftBot.setButtonLight(Button.X, false);
 				swiftBot.setUnderlight(Underlight.MIDDLE_RIGHT, green);
-				try {																		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
+				try {																		
 					playerSeq.add(new ArrayList<String>());
 					String[][] addColour = ConvertChoice(green);                               
 					ArrayList<ArrayList<String>> p1 = AddPlayerChoice(addColour); 
-					correct = CompareChoiceToSequence(p1,seq);	
-					System.out.println(correct);												
+					correct = CompareChoiceToSequence(p1,seq);												
 					if(correct == true) {
 						for(int x=0;x<3;x++) {
 							playerSeq.get(Counter-1).add(p1.get(0).get(x));
 						}
-						System.out.println("IT IS GREEN");
+						System.out.println("Colours Inputted: "+Counter);
+						if(Counter == Round) {
+							swiftBot.disableAllButtons();
+							swiftBot.disableButtonLights();
+							Thread.sleep(300);
+							swiftBot.disableUnderlight(Underlight.MIDDLE_RIGHT);
+							Game();
+						}
 					}
 					else {
+						swiftBot.disableAllButtons();
+						swiftBot.disableButtonLights();
+						swiftBot.disableUnderlights();
 						System.out.println("\r");
 						System.out.println("GAME OVER NERD");
 						System.out.println("You made it to Round: "+Round);
-						
-						System.exit(5);
+						System.out.println("\r");
+						System.out.println("\r");
+						Thread.sleep(7000);
+						Menu();
 					}
-					Thread.sleep(500);															//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					Thread.sleep(500);															
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 					System.exit(5);
@@ -242,43 +271,44 @@ public class Swiftbot_Project {
 			});
 
 			swiftBot.enableButton(Button.Y, () -> {
-				System.out.println("Button Y Pressed.");
-				swiftBot.setButtonLight(Button.Y, false);
 				swiftBot.setUnderlight(Underlight.BACK_RIGHT, yellow);
-				try {																		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
+				try {																			
 					playerSeq.add(new ArrayList<String>());
 					String[][] addColour = ConvertChoice(yellow);                               
 					ArrayList<ArrayList<String>> p1 = AddPlayerChoice(addColour); 
-					correct = CompareChoiceToSequence(p1,seq);	
-					System.out.println(correct);												
+					correct = CompareChoiceToSequence(p1,seq);													
 					if(correct == true) {
 						for(int x=0;x<3;x++) {
 							playerSeq.get(Counter-1).add(p1.get(0).get(x));
 						}
-						System.out.println("IT IS YELLOW");
+						System.out.println("Colours Inputted: "+Counter);
+						if(Counter == Round) {
+							swiftBot.disableAllButtons();
+							swiftBot.disableButtonLights();
+							Thread.sleep(300);
+							swiftBot.disableUnderlight(Underlight.BACK_RIGHT);
+							Game();
+						}
 					}
 					else {
+						swiftBot.disableAllButtons();
+						swiftBot.disableButtonLights();
+						swiftBot.disableUnderlights();
 						System.out.println("\r");
 						System.out.println("GAME OVER NERD");
 						System.out.println("You made it to Round: "+Round);
-						
-						System.exit(5);
+						System.out.println("\r");
+						System.out.println("\r");
+						Thread.sleep(7000);
+						Menu();
 					}
-					Thread.sleep(500);															//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					Thread.sleep(500);															
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 					System.exit(5);
 				}
 				swiftBot.disableUnderlight(Underlight.BACK_RIGHT);
 			});
-
-			while (System.currentTimeMillis() < endtime) {
-				; 
-			}
-			swiftBot.disableAllButtons(); 
-			swiftBot.disableButtonLights(); 
-			System.out.println("All buttons are now off.");
-
 		} catch (Exception e) {
 			System.out.println("Something went wrong with the buttons");
 			e.printStackTrace();
@@ -287,17 +317,19 @@ public class Swiftbot_Project {
 
 	}
 
-
 	//The method below creates a random adding sequences of colours that are outputted on the Underlights of the SwiftBot
 
 	public static ArrayList<ArrayList<String>> RandomSequenceGenerator(ArrayList<ArrayList<String>> seq) throws InterruptedException {
 
 		Random rand = new Random();
 		Round+=1;
+		Counter = 0;
 		try {
 			int nextCol = rand.nextInt(4);
 			String[][] temp = new String[][]{{"","",""}};
+			if(seq.size() < Round) {
 			seq.add(new ArrayList<String>());
+			}
 			for(int x=0;x<3;x++) {
 				temp[0][x] = String.valueOf(colours[nextCol][x]);
 				seq.get(Round-1).add(temp[0][x]);
@@ -342,6 +374,7 @@ public class Swiftbot_Project {
 			System.out.println("CheckCorrectColour Method go boom");
 			System.exit(5);
 		}
+
 		Counter+=1;
 		return temp;
 	}
@@ -379,6 +412,18 @@ public class Swiftbot_Project {
 
 		return isCorrect;
 	}
+
+	public static void Game() throws InterruptedException {
+		Thread.sleep(1500);
+		ArrayList<ArrayList<String>> newSeq = RandomSequenceGenerator(seq);
+		seq = newSeq;
+		Thread.sleep(500);
+		buttonsActive();
+
+
+	}
+
+
 
 }
 
