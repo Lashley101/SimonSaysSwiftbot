@@ -21,8 +21,8 @@ public class Swiftbot_Project {
 			Underlight.MIDDLE_RIGHT, Underlight.FRONT_LEFT, Underlight.FRONT_RIGHT };
 	static int Round = 0;
 	static int Counter = 0;
-	static boolean correct = true;1
-	1
+	static boolean correct = true;
+	
 
 	public static void main(String[] args) throws InterruptedException {
 		try {
@@ -180,6 +180,9 @@ public class Swiftbot_Project {
 						System.out.println("\r");
 						System.out.println("\r");
 						Thread.sleep(7000);
+						if(Round>=5){
+							VictoryDance();
+						}
 						Menu();
 					}
 					Thread.sleep(500);															//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -219,7 +222,9 @@ public class Swiftbot_Project {
 						System.out.println("You made it to Round: "+Round);
 						System.out.println("\r");
 						System.out.println("\r");
-						
+						if(Round>=5){
+							VictoryDance();
+						}
 						Thread.sleep(7000);
 						Menu();
 					}
@@ -261,6 +266,9 @@ public class Swiftbot_Project {
 						System.out.println("\r");
 						System.out.println("\r");
 						Thread.sleep(7000);
+						if(Round>=5){
+							VictoryDance();
+						}
 						Menu();
 					}
 					Thread.sleep(500);															
@@ -301,6 +309,9 @@ public class Swiftbot_Project {
 						System.out.println("\r");
 						System.out.println("\r");
 						Thread.sleep(7000);
+						if(Round>=5){
+							VictoryDance();
+						}
 						Menu();
 					}
 					Thread.sleep(500);															
@@ -435,6 +446,7 @@ public class Swiftbot_Project {
 	                break;
 	            case "2":
 	                System.out.println("Game Over! You made it to Round: " + Round);
+			VictoryDance();
 	                Menu();  // Exit the game
 	                break;
 	            default:
@@ -449,6 +461,33 @@ public class Swiftbot_Project {
 		    Thread.sleep(500);
 		    buttonsActive();
 	}
+	public static void VictoryDance() {
+	int leftWheelVelocity = 0;
+	int rightWheelVelocity = 0;
+	try {
+	Thread.sleep(800);
+	System.out.println("You have completed at least Round 5!!!");
+	Thread.sleep(800);
+	System.out.println("The robot will proceed to do a victory lap! Please put it in an open area");
+	Thread.sleep(2500);
+	leftWheelVelocity = 50;
+	rightWheelVelocity = 50;
+	swiftBot.move(leftWheelVelocity, rightWheelVelocity, 1500);
+	leftWheelVelocity = 100;
+	rightWheelVelocity = 0;
+	swiftBot.move(leftWheelVelocity, rightWheelVelocity, 750);
+	leftWheelVelocity = 50;
+	rightWheelVelocity = 50;
+	swiftBot.move(leftWheelVelocity, rightWheelVelocity, 1500);
+	Menu();
+	
+	}catch(Exception e) {
+		e.printStackTrace();
+		System.out.println("ComparingChoiceToSequence somehow failed you dumb dumb");
+		System.exit(5);
+	}
+
+}
 	       
 	
 }
