@@ -1,3 +1,4 @@
+
 package DoesMySwiftbotWork.DoesMySwiftbotWorkTest;
 
 import swiftbot.*;
@@ -134,6 +135,9 @@ public class Swiftbot_Project {
 		int[] green = new int[] { 0, 255, 0 };
 		int[] yellow = new int[] { 255, 255, 0 };
 		ArrayList<ArrayList<String>> playerSeq = new ArrayList<ArrayList<String>>();
+		swiftBot.disableAllButtons();
+		swiftBot.disableButtonLights();
+		swiftBot.disableUnderlights();
 		System.out.println("--------------------------------------------------------------------------");
 		System.out.println("");
 		System.out.println("Round:"+Round);
