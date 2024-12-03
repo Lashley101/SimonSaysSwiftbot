@@ -21,7 +21,8 @@ public class Swiftbot_Project {
 			Underlight.MIDDLE_RIGHT, Underlight.FRONT_LEFT, Underlight.FRONT_RIGHT };
 	static int Round = 0;
 	static int Counter = 0;
-	static boolean correct = true;
+	static boolean correct = true;1
+	1
 
 	public static void main(String[] args) throws InterruptedException {
 		try {
@@ -414,17 +415,40 @@ public class Swiftbot_Project {
 	}
 
 	public static void Game() throws InterruptedException {
-		Thread.sleep(1500);
-		ArrayList<ArrayList<String>> newSeq = RandomSequenceGenerator(seq);
-		seq = newSeq;
-		Thread.sleep(500);
-		buttonsActive();
+	    // After each round, generate the sequence
+		
 
+	    // Only ask if the player wants to continue after the 5th round
+	    if (Round > 1 && (Round  % 5 == 0)) {
+	        Scanner reader = new Scanner(System.in);  
+	        System.out.println("--------------------------------------------------------------------------");
+	        System.out.println("You have completed " + Round + " rounds!");
+	        System.out.println("Would you like to continue or quit?");
+	        System.out.println("Enter 1 to continue or 2 to quit:");
 
+	        // Pause the game and wait for user input
+	        String ans = reader.next();
+
+	        switch (ans) {
+	            case "1":
+	                System.out.println("Continuing the game!");
+	                break;
+	            case "2":
+	                System.out.println("Game Over! You made it to Round: " + Round);
+	                Menu();  // Exit the game
+	                break;
+	            default:
+	                System.out.println("Invalid input, continuing the game.");
+	                break;
+	        }
+	        
+	    }
+	    Thread.sleep(1500);
+		    ArrayList<ArrayList<String>> newSeq = RandomSequenceGenerator(seq);
+		    seq = newSeq;
+		    Thread.sleep(500);
+		    buttonsActive();
 	}
-
-
-
+	       
+	
 }
-
-
