@@ -23,7 +23,7 @@ public class Swiftbot_Project {
 	static int Round = 0;
 	static int Counter = 0;
 	static boolean correct = true;
-	
+
 
 	public static void main(String[] args) throws InterruptedException {
 		try {
@@ -344,7 +344,7 @@ public class Swiftbot_Project {
 			int nextCol = rand.nextInt(4);
 			String[][] temp = new String[][]{{"","",""}};
 			if(seq.size() < Round) {
-			seq.add(new ArrayList<String>());
+				seq.add(new ArrayList<String>());
 			}
 			for(int x=0;x<3;x++) {
 				temp[0][x] = String.valueOf(colours[nextCol][x]);
@@ -430,68 +430,78 @@ public class Swiftbot_Project {
 	}
 
 	public static void Game() throws InterruptedException {
-	    // After each round, generate the sequence
-		
+		// After each round, generate the sequence
 
-	    // Only ask if the player wants to continue after the 5th round
-	    if (Round > 1 && (Round  % 5 == 0)) {
-	        Scanner reader = new Scanner(System.in);  
-	        System.out.println("--------------------------------------------------------------------------");
-	        System.out.println("You have completed " + Round + " rounds!");
-	        System.out.println("Would you like to continue or quit?");
-	        System.out.println("Enter 1 to continue or 2 to quit:");
 
-	        // Pause the game and wait for user input
-	        String ans = reader.next();
+		// Only ask if the player wants to continue after the 5th round
+		if (Round > 1 && (Round  % 5 == 0)) {
+			Scanner reader = new Scanner(System.in);  
+			System.out.println("--------------------------------------------------------------------------");
+			System.out.println("You have completed " + Round + " rounds!");
+			System.out.println("Would you like to continue or quit?");
+			System.out.println("Enter 1 to continue or 2 to quit:");
 
-	        switch (ans) {
-	            case "1":
-	                System.out.println("Continuing the game!");
-	                break;
-	            case "2":
-	                System.out.println("Game Over! You made it to Round: " + Round);
-			VictoryDance();
-	                Menu();  // Exit the game
-	                break;
-	            default:
-	                System.out.println("Invalid input, continuing the game.");
-	                break;
-	        }
-	        
-	    }
-	    Thread.sleep(1500);
-		    ArrayList<ArrayList<String>> newSeq = RandomSequenceGenerator(seq);
-		    seq = newSeq;
-		    Thread.sleep(500);
-		    buttonsActive();
+			// Pause the game and wait for user input
+			String ans = reader.next();
+
+			switch (ans) {
+			case "1":
+				System.out.println("Continuing the game!");
+				break;
+			case "2":
+				System.out.println("Game Over! You made it to Round: " + Round);
+				VictoryDance();
+				Menu();  // Exit the game
+				break;
+			default:
+				System.out.println("Invalid input, continuing the game.");
+				break;
+			}
+
+		}
+		Thread.sleep(1500);
+		ArrayList<ArrayList<String>> newSeq = RandomSequenceGenerator(seq);
+		seq = newSeq;
+		Thread.sleep(500);
+		buttonsActive();
 	}
+
 	public static void VictoryDance() {
-	int leftWheelVelocity = 0;
-	int rightWheelVelocity = 0;
-	try {
-	Thread.sleep(800);
-	System.out.println("You have completed at least Round 5!!!");
-	Thread.sleep(800);
-	System.out.println("The robot will proceed to do a victory lap! Please put it in an open area");
-	Thread.sleep(2500);
-	leftWheelVelocity = 50;
-	rightWheelVelocity = 50;
-	swiftBot.move(leftWheelVelocity, rightWheelVelocity, 1500);
-	leftWheelVelocity = 100;
-	rightWheelVelocity = 0;
-	swiftBot.move(leftWheelVelocity, rightWheelVelocity, 750);
-	leftWheelVelocity = 50;
-	rightWheelVelocity = 50;
-	swiftBot.move(leftWheelVelocity, rightWheelVelocity, 1500);
-	Menu();
-	
-	}catch(Exception e) {
-		e.printStackTrace();
-		System.out.println("ComparingChoiceToSequence somehow failed you dumb dumb");
-		System.exit(5);
+		int leftWheelVelocity = 0;
+		int rightWheelVelocity = 0;
+		try {
+			for(int[] rgb:colours) {
+				swiftBot.fillUnderlights(rgb);
+				Thread.sleep(200);
+			}
+			swiftBot.disableUnderlights();
+			Thread.sleep(800);
+			System.out.println("You have completed at least Round 5!!!");
+			Thread.sleep(800);
+			System.out.println("The robot will proceed to do a victory lap! Please put it in an open area");
+			Thread.sleep(2500);
+			leftWheelVelocity = 50;
+			rightWheelVelocity = 50;
+			swiftBot.move(leftWheelVelocity, rightWheelVelocity, 1500);
+			leftWheelVelocity = 100;
+			rightWheelVelocity = 0;
+			swiftBot.move(leftWheelVelocity, rightWheelVelocity, 750);
+			leftWheelVelocity = 50;
+			rightWheelVelocity = 50;
+			swiftBot.move(leftWheelVelocity, rightWheelVelocity, 1500);
+			for(int[] rgb:colours) {
+				swiftBot.fillUnderlights(rgb);
+				Thread.sleep(200);
+			}
+			swiftBot.disableUnderlights();
+
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("ComparingChoiceToSequence somehow failed you dumb dumb");
+			System.exit(5);
+		}
+
 	}
 
-}
-	       
-	
+
 }
