@@ -446,9 +446,11 @@ public class Swiftbot_Project {
 
 			switch (ans) {
 			case "1":
+				System.out.println("\r");
 				System.out.println("Continuing the game!");
 				break;
 			case "2":
+				System.out.println("\r");
 				System.out.println("Game Over! You made it to Round: " + Round);
 				VictoryDance();
 				Menu();  // Exit the game
